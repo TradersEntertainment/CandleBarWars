@@ -4,10 +4,15 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAccount } from 'wagmi';
 import { parseEther, formatEther } from 'viem';
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import abi from './abi.json';
-import { MarketChart } from './MarketChart';
+
+const MarketChart = dynamic(() => import('./MarketChart').then(mod => mod.MarketChart), {
+  ssr: false,
+  loading: () => <div className="w-full h-full animate-pulse bg-gray-900/10" />
+});
 
 const CONTRACT_ADDRESS_DAILY = '0x7da6Ef758A38773033FeC7421959c0AECbeF4719'; // V3.8 House Wins
 const CONTRACT_ADDRESS_15M = '0x5eeF836485FC1113Ad0B0C0EFFA429D1a0684B2b'; // V4 15m
