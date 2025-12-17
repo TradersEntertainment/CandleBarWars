@@ -1,0 +1,665 @@
+
+> frontend@0.1.0 build
+> next build
+
+ ÔÜá Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\omery\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\omery\.gemini\antigravity\scratch\base-weather-art\frontend\package-lock.json
+   * C:\Users\omery\.gemini\antigravity\scratch\base-weather-art\package-lock.json
+
+   Ôû▓ Next.js 16.0.10 (Turbopack)
+
+   Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 30 errors:
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/ts.test.ts
+Missing module type
+The module type effect must be applied before adding Ecmascript transforms
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/ts/to-file.ts
+Missing module type
+The module type effect must be applied before adding Ecmascript transforms
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/README.md
+Unknown module type
+This module doesn't have an associated type. Use a known file extension, or register a loader for it.
+
+Read more: https://nextjs.org/docs/app/api-reference/next-config-js/turbo#webpack-loaders
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/dir with spaces/test-package.zip
+Unknown module type
+This module doesn't have an associated type. Use a known file extension, or register a loader for it.
+
+Read more: https://nextjs.org/docs/app/api-reference/next-config-js/turbo#webpack-loaders
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/ts.test.ts
+Unknown module type
+This module doesn't have an associated type. Use a known file extension, or register a loader for it.
+
+Read more: https://nextjs.org/docs/app/api-reference/next-config-js/turbo#webpack-loaders
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/ts/to-file.ts
+Unknown module type
+This module doesn't have an associated type. Use a known file extension, or register a loader for it.
+
+Read more: https://nextjs.org/docs/app/api-reference/next-config-js/turbo#webpack-loaders
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/ts/transpile.sh
+Unknown module type
+This module doesn't have an associated type. Use a known file extension, or register a loader for it.
+
+Read more: https://nextjs.org/docs/app/api-reference/next-config-js/turbo#webpack-loaders
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/LICENSE:1:5
+Parsing ecmascript source code failed
+> 1 | MIT License
+    |     ^^^^^^^
+  2 |
+  3 | Copyright (c) 2021 Matteo Collina
+  4 |
+
+Expected ';', '}' or <eof>
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/LICENSE [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test
+Module not found: Can't resolve './ROOT/.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/close-on-gc.js'
+server relative imports are not implemented yet. Please try an import relative to the file you are importing from.
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test
+Module not found: Can't resolve './ROOT/.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/create-and-exit.js'
+server relative imports are not implemented yet. Please try an import relative to the file you are importing from.
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/thread-management.test.js:164:17
+Module not found: Can't resolve '/ROOT/.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/close-on-gc.js'
+  162 | test('close the work if out of scope on gc', { skip: !global.WeakRef }, async function (t) {
+  163 |   const dest = file()
+> 164 |   const child = fork(join(__dirname, 'close-on-gc.js'), [dest], {
+      |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 165 |     execArgv: ['--expose-gc']
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 166 |   })
+      | ^^^^^
+  167 |
+  168 |   const [code] = await once(child, 'exit')
+  169 |   t.equal(code, 0)
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/thread-management.test.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/thread-management.test.js:13:17
+Module not found: Can't resolve '/ROOT/.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/create-and-exit.js'
+  11 | test('exits with 0', async function (t) {
+  12 |   const dest = file()
+> 13 |   const child = fork(join(__dirname, 'create-and-exit.js'), [dest])
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  14 |
+  15 |   const [code] = await once(child, 'exit')
+  16 |   t.equal(code, 0)
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/thread-management.test.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/esm.test.mjs:4:1
+Module not found: Can't resolve 'desm'
+  2 | import { readFile } from 'fs'
+  3 | import ThreadStream from '../index.js'
+> 4 | import { join } from 'desm'
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 | import { pathToFileURL } from 'url'
+  6 | import { file } from './helper.js'
+  7 |
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/esm.test.mjs [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/multibyte-chars.test.mjs:4:1
+Module not found: Can't resolve 'desm'
+  2 | import { readFile } from 'fs'
+  3 | import ThreadStream from '../index.js'
+> 4 | import { join } from 'desm'
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  5 | import { file } from './helper.js'
+  6 |
+  7 | test('break up utf8 multibyte (sync)', (t) => {
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/multibyte-chars.test.mjs [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/bench.js:3:15
+Module not found: Can't resolve 'fastbench'
+  1 | 'use strict'
+  2 |
+> 3 | const bench = require('fastbench')
+    |               ^^^^^^^^^^^^^^^^^^^^
+  4 | const SonicBoom = require('sonic-boom')
+  5 | const ThreadStream = require('.')
+  6 | const Console = require('console').Console
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/bench.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/commonjs-fallback.test.js:14:22
+Module not found: Can't resolve 'pino-elasticsearch'
+  12 |   t.plan(6)
+  13 |
+> 14 |   const modulePath = require.resolve('pino-elasticsearch')
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  15 |   t.match(modulePath, /.*\.zip.*/)
+  16 |
+  17 |   const stream = new ThreadStream({
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/commonjs-fallback.test.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/base.test.js:3:18
+Module not found: Can't resolve 'tap'
+  1 | 'use strict'
+  2 |
+> 3 | const { test } = require('tap')
+    |                  ^^^^^^^^^^^^^^
+  4 | const { join } = require('path')
+  5 | const { readFile } = require('fs')
+  6 | const { file } = require('./helper')
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/base.test.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/bench.test.js:3:18
+Module not found: Can't resolve 'tap'
+  1 | 'use strict'
+  2 |
+> 3 | const { test } = require('tap')
+    |                  ^^^^^^^^^^^^^^
+  4 | const { join } = require('path')
+  5 | const ThreadStream = require('..')
+  6 | const { file } = require('./helper')
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/bench.test.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/bundlers.test.js:3:18
+Module not found: Can't resolve 'tap'
+  1 | 'use strict'
+  2 |
+> 3 | const { test } = require('tap')
+    |                  ^^^^^^^^^^^^^^
+  4 | const { join } = require('path')
+  5 | const { file } = require('./helper')
+  6 | const ThreadStream = require('..')
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/bundlers.test.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/commonjs-fallback.test.js:3:18
+Module not found: Can't resolve 'tap'
+  1 | 'use strict'
+  2 |
+> 3 | const { test } = require('tap')
+    |                  ^^^^^^^^^^^^^^
+  4 | const { join } = require('path')
+  5 | const { MessageChannel } = require('worker_threads')
+  6 | const { once } = require('events')
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/commonjs-fallback.test.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/end.test.js:3:18
+Module not found: Can't resolve 'tap'
+  1 | 'use strict'
+  2 |
+> 3 | const { test } = require('tap')
+    |                  ^^^^^^^^^^^^^^
+  4 | const { join } = require('path')
+  5 | const { readFile } = require('fs')
+  6 | const { file } = require('./helper')
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/end.test.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/esm.test.mjs:1:1
+Module not found: Can't resolve 'tap'
+> 1 | import { test } from 'tap'
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  2 | import { readFile } from 'fs'
+  3 | import ThreadStream from '../index.js'
+  4 | import { join } from 'desm'
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/esm.test.mjs [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/helper.js:7:11
+Module not found: Can't resolve 'tap'
+   5 | const { unlinkSync } = require('fs')
+   6 | const why = require('why-is-node-running')
+>  7 | const t = require('tap')
+     |           ^^^^^^^^^^^^^^
+   8 |
+   9 | const files = []
+  10 | let count = 0
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/helper.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/multibyte-chars.test.mjs:1:1
+Module not found: Can't resolve 'tap'
+> 1 | import { test } from 'tap'
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  2 | import { readFile } from 'fs'
+  3 | import ThreadStream from '../index.js'
+  4 | import { join } from 'desm'
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/multibyte-chars.test.mjs [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/string-limit-2.test.js:3:11
+Module not found: Can't resolve 'tap'
+  1 | 'use strict'
+  2 |
+> 3 | const t = require('tap')
+    |           ^^^^^^^^^^^^^^
+  4 | const { join } = require('path')
+  5 | const { file } = require('./helper')
+  6 | const { createReadStream } = require('fs')
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/string-limit-2.test.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/string-limit.test.js:3:11
+Module not found: Can't resolve 'tap'
+  1 | 'use strict'
+  2 |
+> 3 | const t = require('tap')
+    |           ^^^^^^^^^^^^^^
+  4 | const { join } = require('path')
+  5 | const { file } = require('./helper')
+  6 | const { stat } = require('fs')
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/string-limit.test.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/thread-management.test.js:3:18
+Module not found: Can't resolve 'tap'
+  1 | 'use strict'
+  2 |
+> 3 | const { test } = require('tap')
+    |                  ^^^^^^^^^^^^^^
+  4 | const { fork } = require('child_process')
+  5 | const { join } = require('path')
+  6 | const { readFile } = require('fs').promises
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/thread-management.test.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/transpiled.test.js:3:18
+Module not found: Can't resolve 'tap'
+  1 | 'use strict'
+  2 |
+> 3 | const { test } = require('tap')
+    |                  ^^^^^^^^^^^^^^
+  4 | const { join } = require('path')
+  5 | const { file } = require('./helper')
+  6 | const ThreadStream = require('..')
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/transpiled.test.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/indexes.js:3:14
+Module not found: Can't resolve 'tape'
+  1 | 'use strict'
+  2 |
+> 3 | const test = require('tape')
+    |              ^^^^^^^^^^^^^^^
+  4 | const indexes = require('../lib/indexes')
+  5 |
+  6 | for (const index of Object.keys(indexes)) {
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/indexes.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/helper.js:6:13
+Module not found: Can't resolve 'why-is-node-running'
+  4 | const { tmpdir } = require('os')
+  5 | const { unlinkSync } = require('fs')
+> 6 | const why = require('why-is-node-running')
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  7 | const t = require('tap')
+  8 |
+  9 | const files = []
+
+
+
+Import trace:
+  Client Component SSR:
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/test/helper.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/thread-stream/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/lib/transport.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/pino/pino.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/universal-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@walletconnect/ethereum-provider/dist/index.es.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@wagmi/connectors/dist/esm/walletConnect.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/node_modules/@rainbow-me/rainbowkit/dist/index.js [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Client Component SSR]
+    ./.gemini/antigravity/scratch/base-weather-art/frontend/app/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    ... collapsed 21 duplicate lines matching above 1 lines 21 times...

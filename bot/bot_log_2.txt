@@ -1,0 +1,24 @@
+Fetching crypto prices...
+BTC Change: 0.394545188208915%, ETH Change: -2.9825051646402154%, Avg: -1.2939799882156502%
+Generating prompt with Gemini...
+Gemini error: No module named 'vertexai'. Fallback to template.
+Generating image (Mockup/Placeholder as we need Imagen access)...
+Downloading from https://picsum.photos/1024...
+Image downloaded.
+Uploading daily_weather.jpg to Pinata...
+Uploaded! CID: QmajemUWkWaoEdTLgMQMCVbT2F2J5ntfckHH68VA1V3yjG
+Uploading metadata to Pinata...
+Metadata Uploaded! CID: QmTX32uVVpeDM42L8cKDnT762ZyDsvMjcA6ZzRro6Z7Cd5
+New Toxic URI: ipfs://QmTX32uVVpeDM42L8cKDnT762ZyDsvMjcA6ZzRro6Z7Cd5
+Updating smart contract...
+Traceback (most recent call last):
+  File "C:\Users\omery\.gemini\antigravity\scratch\base-weather-art\bot\bot.py", line 218, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\omery\.gemini\antigravity\scratch\base-weather-art\bot\bot.py", line 215, in main
+    update_contract(token_uri)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\omery\.gemini\antigravity\scratch\base-weather-art\bot\bot.py", line 174, in update_contract
+    tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SignedTransaction' object has no attribute 'rawTransaction'. Did you mean: 'raw_transaction'?

@@ -1,0 +1,9 @@
+[dotenv@17.2.3] injecting env (6) from ..\.env -- tip: Ô£à audit secrets and track compliance: https://dotenvx.com/ops
+--- START CHECK ---
+[SEPOLIA] Address: 0x41c5C7cA1784B5258b694DD95dEcbE9cd8186235
+[SEPOLIA] Balance (wei): 50000000000000000
+[SEPOLIA] Balance (eth): 0.05
+[MAINNET] Address: 0x41c5C7cA1784B5258b694DD95dEcbE9cd8186235
+[MAINNET] Balance (wei): 0
+[MAINNET] Balance (eth): 0.0
+--- END CHECK ---
