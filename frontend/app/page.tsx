@@ -45,8 +45,23 @@ export default function Home() {
         try {
           const kRes = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${symbol}USDT&interval=1m&limit=1440`);
           const kData = await kRes.json();
+
+          // Filter for Today (UTC 00:00)
+          const now = new Date();
+          const startOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));
+          const startTs = startOfDay.getTime();
+
           let g = 0, r = 0;
-          kData.forEach((c: any) => parseFloat(c[4]) > parseFloat(c[1]) ? g++ : r++);
+          kData.forEach((c: any) => {
+            const openTime = c[0];
+            if (openTime >= startTs) {
+              if (parseFloat(c[4]) > parseFloat(c[1])) g++;
+              else r++;
+            }
+          });
+
+          const totalToday = g + r;
+          const remaining = 1440 - totalToday;
 
           const pRes = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}USDT`);
           const pData = await pRes.json();
@@ -57,7 +72,7 @@ export default function Home() {
           dData.forEach((c: any) => parseFloat(c[4]) > parseFloat(c[1]) ? gDays++ : null);
           const wr = ((gDays / 7) * 100).toFixed(0) + '%';
 
-          newData[symbol] = { green: g, red: r, price: parseFloat(pData.price), winRate: wr };
+          newData[symbol] = { green: g, red: r, price: parseFloat(pData.price), winRate: wr, remaining: remaining };
         } catch (e) { console.error(e); }
       }
       setMarketData(newData);
