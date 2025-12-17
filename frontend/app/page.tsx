@@ -191,6 +191,7 @@ function MarketCard({ symbol, data }: { symbol: string, data: any }) {
 
   const [quantity, setQuantity] = useState<number>(1);
   const [showInfo, setShowInfo] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const { data: stats, refetch } = useReadContract({
     address: CONTRACT_ADDRESS,
@@ -209,10 +210,14 @@ function MarketCard({ symbol, data }: { symbol: string, data: any }) {
 
   useEffect(() => {
     if (isConfirmed) {
+      setShowSuccess(true);
       refetch();
       refetchUser();
       setTimeout(() => { refetch(); refetchUser(); }, 2000);
-      setTimeout(() => { refetch(); refetchUser(); }, 5000);
+      const timer = setTimeout(() => {
+        setShowSuccess(false);
+      }, 5000);
+      return () => clearTimeout(timer);
     }
   }, [isConfirmed, refetch, refetchUser]);
 
@@ -485,7 +490,7 @@ function MarketCard({ symbol, data }: { symbol: string, data: any }) {
               {bearPct > 15 && <span className="text-[8px] font-bold text-black opacity-70">{Math.round(bearPct)}%</span>}
             </div>
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              {isConfirmed ? (
+              {showSuccess ? (
                 <span className="text-[9px] font-bold text-white drop-shadow-md animate-pulse">BET PLACED! UPDATING...</span>
               ) : (
                 <span className="text-[9px] font-mono text-gray-500/50 uppercase tracking-widest">Live Sentiment</span>
