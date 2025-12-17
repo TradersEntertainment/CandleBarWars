@@ -45,6 +45,12 @@ export default function Home() {
   const [showInfo, setShowInfo] = useState(false);
   const [timeLeft, setTimeLeft] = useState<string>("");
   const [marketData, setMarketData] = useState<any>({});
+  const [mounted, setMounted] = useState(false);
+
+  // Ensure we're on client before using document
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const toggleArena = () => {
     setShowThunder(true);
@@ -203,7 +209,7 @@ export default function Home() {
       )}
 
       {/* Info Modal Portal */}
-      {showInfo && createPortal(
+      {mounted && showInfo && createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={() => setShowInfo(false)}>
           <div className="bg-[#0A0A0A] border border-gray-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative" onClick={e => e.stopPropagation()}>
             <button onClick={() => setShowInfo(false)} className="absolute top-4 right-4 text-gray-500 hover:text-white">
