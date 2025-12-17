@@ -8,7 +8,9 @@ import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import abi from './abi.json';
 
-const CONTRACT_ADDRESS = '0xF251A04729A87B1637272b102137c9fa77837272'; // V3.7 Batch
+const CONTRACT_ADDRESS_DAILY = '0x7da6Ef758A38773033FeC7421959c0AECbeF4719'; // V3.8 House Wins
+const CONTRACT_ADDRESS_15M = '0x5eeF836485FC1113Ad0B0C0EFFA429D1a0684B2b'; // V4 15m
+
 const MARKETS = ['BTC', 'ETH', 'SOL', 'XRP'];
 
 const ASSET_THEMES: Record<string, string> = {
@@ -26,8 +28,10 @@ const ASSET_LOGOS: Record<string, string> = {
 };
 
 export default function Home() {
+  const currentContract = isFastArena ? CONTRACT_ADDRESS_15M : CONTRACT_ADDRESS_DAILY;
+
   const { data: ethPrice } = useReadContract({
-    address: CONTRACT_ADDRESS,
+    address: currentContract,
     abi: abi,
     functionName: 'getMarketStats',
     args: ['ETH'],
@@ -57,36 +61,65 @@ export default function Home() {
       const newData: any = {};
       for (const symbol of MARKETS) {
         try {
-          const kRes = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${symbol}USDT&interval=1m&limit=1440`);
-          const kData = await kRes.json();
-
-          // Filter for Today (UTC 00:00)
           const now = new Date();
-          const startOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));
-          const startTs = startOfDay.getTime();
 
-          let g = 0, r = 0;
-          kData.forEach((c: any) => {
-            const openTime = c[0];
-            if (openTime >= startTs) {
-              if (parseFloat(c[4]) > parseFloat(c[1])) g++;
-              else r++;
-            }
-          });
+          if (isFastArena) {
+            // 15m ARENA LOGIC
+            const currentMin = now.getMinutes();
+            const startOf15m = currentMin - (currentMin % 15);
+            // Fetch sufficient candles to cover the overlap
+            const kRes = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${symbol}USDT&interval=1m&limit=30`);
+            const kData = await kRes.json();
 
-          const totalToday = g + r;
-          const remaining = 1440 - totalToday;
+            let g = 0, r = 0;
+            // Filter candles that belong to the current 15-minute block
+            const currentBlockStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), startOf15m, 0, 0).getTime();
 
-          const pRes = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}USDT`);
-          const pData = await pRes.json();
+            kData.forEach((c: any) => {
+              const openTime = c[0];
+              if (openTime >= currentBlockStart) {
+                if (parseFloat(c[4]) > parseFloat(c[1])) g++;
+                else r++;
+              }
+            });
+            const remaining = 15 - (currentMin % 15);
+            const wr = "---"; // Win rate na for 15m
+            const pRes = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}USDT`);
+            const pData = await pRes.json();
+            newData[symbol] = { green: g, red: r, price: parseFloat(pData.price), winRate: wr, remaining: remaining };
 
-          const dRes = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${symbol}USDT&interval=1d&limit=7`);
-          const dData = await dRes.json();
-          let gDays = 0;
-          dData.forEach((c: any) => parseFloat(c[4]) > parseFloat(c[1]) ? gDays++ : null);
-          const wr = ((gDays / 7) * 100).toFixed(0) + '%';
+          } else {
+            // DAILY LOGIC
+            const kRes = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${symbol}USDT&interval=1m&limit=1440`);
+            const kData = await kRes.json();
 
-          newData[symbol] = { green: g, red: r, price: parseFloat(pData.price), winRate: wr, remaining: remaining };
+            // Filter for Today (UTC 00:00)
+            const startOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));
+            const startTs = startOfDay.getTime();
+
+            let g = 0, r = 0;
+            kData.forEach((c: any) => {
+              const openTime = c[0];
+              if (openTime >= startTs) {
+                if (parseFloat(c[4]) > parseFloat(c[1])) g++;
+                else r++;
+              }
+            });
+
+            const totalToday = g + r;
+            const remaining = 1440 - totalToday;
+
+            const pRes = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}USDT`);
+            const pData = await pRes.json();
+
+            const dRes = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${symbol}USDT&interval=1d&limit=7`);
+            const dData = await dRes.json();
+            let gDays = 0;
+            dData.forEach((c: any) => parseFloat(c[4]) > parseFloat(c[1]) ? gDays++ : null);
+            const wr = ((gDays / 7) * 100).toFixed(0) + '%';
+
+            newData[symbol] = { green: g, red: r, price: parseFloat(pData.price), winRate: wr, remaining: remaining };
+          }
         } catch (e) { console.error(e); }
       }
       setMarketData(newData);
@@ -94,21 +127,33 @@ export default function Home() {
 
     const updateTimer = () => {
       const now = new Date();
-      const next = new Date(now);
-      next.setUTCHours(24, 0, 0, 0);
-      const diff = next.getTime() - now.getTime();
-      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const m = Math.floor((diff / (1000 * 60)) % 60);
-      const s = Math.floor((diff / 1000) % 60);
-      setTimeLeft(`${h}h ${m}m ${s}s`);
+      if (isFastArena) {
+        // Timer to next 15m block
+        const nextMin = (Math.floor(now.getMinutes() / 15) + 1) * 15;
+        const nextBlock = new Date(now);
+        nextBlock.setMinutes(nextMin, 0, 0);
+        const diff = nextBlock.getTime() - now.getTime();
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        setTimeLeft(`${m}m ${s}s`);
+      } else {
+        // Timer to UTC Midnight
+        const next = new Date(now);
+        next.setUTCHours(24, 0, 0, 0);
+        const diff = next.getTime() - now.getTime();
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        setTimeLeft(`${h}h ${m}m ${s}s`);
+      }
     };
 
     fetchData();
     updateTimer();
-    const dInt = setInterval(fetchData, 60000);
+    const dInt = setInterval(fetchData, isFastArena ? 5000 : 60000); // Faster polling for 15m
     const tInt = setInterval(updateTimer, 1000);
     return () => { clearInterval(dInt); clearInterval(tInt); };
-  }, []);
+  }, [isFastArena]); // Re-run when mode changes
 
   return (
     <main className={`min-h-screen font-sans p-6 selection:bg-green-900 selection:text-white relative transition-colors duration-1000 ${isFastArena ? 'bg-[#000000]' : 'bg-[#050505] text-gray-200'}`}>
@@ -231,7 +276,7 @@ export default function Home() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
         {MARKETS.map(symbol => (
-          <MarketCard key={symbol} symbol={symbol} data={marketData[symbol]} />
+          <MarketCard key={symbol} symbol={symbol} data={marketData[symbol]} contractAddress={currentContract} />
         ))}
       </div>
 
@@ -243,7 +288,7 @@ export default function Home() {
   );
 }
 
-function MarketCard({ symbol, data }: { symbol: string, data: any }) {
+function MarketCard({ symbol, data, contractAddress }: { symbol: string, data: any, contractAddress: `0x${string}` }) {
   const { address } = useAccount();
   const { writeContract, data: hash, isPending, error: writeError } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash });
@@ -253,14 +298,14 @@ function MarketCard({ symbol, data }: { symbol: string, data: any }) {
   const [showSuccess, setShowSuccess] = useState(false);
 
   const { data: stats, refetch } = useReadContract({
-    address: CONTRACT_ADDRESS,
+    address: contractAddress,
     abi: abi,
     functionName: 'getMarketStats',
     args: [symbol],
   });
 
   const { data: userStats, refetch: refetchUser } = useReadContract({
-    address: CONTRACT_ADDRESS,
+    address: contractAddress,
     abi: abi,
     functionName: 'getUserMarketStats',
     args: [symbol, address],
@@ -306,7 +351,7 @@ function MarketCard({ symbol, data }: { symbol: string, data: any }) {
       if (quantity > 1) {
         // Batch Bet
         writeContract({
-          address: CONTRACT_ADDRESS,
+          address: contractAddress,
           abi: abi,
           functionName: 'betBatch',
           args: [symbol, side, quantity],
@@ -315,7 +360,7 @@ function MarketCard({ symbol, data }: { symbol: string, data: any }) {
       } else {
         // Single Bet
         writeContract({
-          address: CONTRACT_ADDRESS,
+          address: contractAddress,
           abi: abi,
           functionName: 'bet',
           args: [symbol, side],
