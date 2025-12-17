@@ -8,9 +8,7 @@ import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import abi from './abi.json';
 
-const CONTRACT_ADDRESS_DAILY = '0x7da6Ef758A38773033FeC7421959c0AECbeF4719'; // V3.8 House Wins
-const CONTRACT_ADDRESS_15M = '0x5eeF836485FC1113Ad0B0C0EFFA429D1a0684B2b'; // V4 15m
-
+const CONTRACT_ADDRESS = '0x7da6Ef758A38773033FeC7421959c0AECbeF4719'; // V3.8 House Wins
 const MARKETS = ['BTC', 'ETH', 'SOL', 'XRP'];
 
 const ASSET_THEMES: Record<string, string> = {
@@ -28,15 +26,8 @@ const ASSET_LOGOS: Record<string, string> = {
 };
 
 export default function Home() {
-  // V4: Fast Arena Logic (State must be declared before usage)
-  const [isFastArena, setIsFastArena] = useState(false);
-  const [showThunder, setShowThunder] = useState(false);
-
-  // Determine contract based on state
-  const currentContract = isFastArena ? CONTRACT_ADDRESS_15M : CONTRACT_ADDRESS_DAILY;
-
   const { data: ethPrice } = useReadContract({
-    address: currentContract,
+    address: CONTRACT_ADDRESS,
     abi: abi,
     functionName: 'getMarketStats',
     args: ['ETH'],
@@ -45,22 +36,6 @@ export default function Home() {
   const [showInfo, setShowInfo] = useState(false);
   const [timeLeft, setTimeLeft] = useState<string>("");
   const [marketData, setMarketData] = useState<any>({});
-  const [mounted, setMounted] = useState(false);
-
-  // Ensure we're on client before using document
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const toggleArena = () => {
-    setShowThunder(true);
-    setTimeout(() => {
-      setIsFastArena(prev => !prev);
-    }, 300); // Switch while screen is white
-    setTimeout(() => {
-      setShowThunder(false);
-    }, 800);
-  };
 
   // 1. Fetch Data (Binance)
   useEffect(() => {
@@ -68,81 +43,36 @@ export default function Home() {
       const newData: any = {};
       for (const symbol of MARKETS) {
         try {
+          const kRes = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${symbol}USDT&interval=1m&limit=1440`);
+          const kData = await kRes.json();
+
+          // Filter for Today (UTC 00:00)
           const now = new Date();
+          const startOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));
+          const startTs = startOfDay.getTime();
 
-          if (isFastArena) {
-            // 15m ARENA LOGIC
-            const currentMin = now.getMinutes();
-            const startOf15m = currentMin - (currentMin % 15);
-            // Fetch sufficient candles to cover the overlap
-            const kRes = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${symbol}USDT&interval=1m&limit=30`);
-            const kData = await kRes.json();
+          let g = 0, r = 0;
+          kData.forEach((c: any) => {
+            const openTime = c[0];
+            if (openTime >= startTs) {
+              if (parseFloat(c[4]) > parseFloat(c[1])) g++;
+              else r++;
+            }
+          });
 
-            let g = 0, r = 0;
-            // Filter candles that belong to the current 15-minute block
-            const currentBlockStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), startOf15m, 0, 0).getTime();
+          const totalToday = g + r;
+          const remaining = 1440 - totalToday;
 
-            const chartData = kData.map((c: any) => ({
-              time: c[0] / 1000,
-              open: parseFloat(c[1]),
-              high: parseFloat(c[2]),
-              low: parseFloat(c[3]),
-              close: parseFloat(c[4]),
-            }));
+          const pRes = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}USDT`);
+          const pData = await pRes.json();
 
-            kData.forEach((c: any) => {
-              const openTime = c[0];
-              if (openTime >= currentBlockStart) {
-                if (parseFloat(c[4]) > parseFloat(c[1])) g++;
-                else r++;
-              }
-            });
-            const remaining = 15 - (currentMin % 15);
-            const wr = "---"; // Win rate na for 15m
-            const pRes = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}USDT`);
-            const pData = await pRes.json();
-            newData[symbol] = { green: g, red: r, price: parseFloat(pData.price), winRate: wr, remaining: remaining, chartData };
+          const dRes = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${symbol}USDT&interval=1d&limit=7`);
+          const dData = await dRes.json();
+          let gDays = 0;
+          dData.forEach((c: any) => parseFloat(c[4]) > parseFloat(c[1]) ? gDays++ : null);
+          const wr = ((gDays / 7) * 100).toFixed(0) + '%';
 
-          } else {
-            // DAILY LOGIC
-            const kRes = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${symbol}USDT&interval=1m&limit=1440`);
-            const kData = await kRes.json();
-
-            const chartData = kData.map((c: any) => ({
-              time: c[0] / 1000,
-              open: parseFloat(c[1]),
-              high: parseFloat(c[2]),
-              low: parseFloat(c[3]),
-              close: parseFloat(c[4]),
-            }));
-
-            // Filter for Today (UTC 00:00)
-            const startOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));
-            const startTs = startOfDay.getTime();
-
-            let g = 0, r = 0;
-            kData.forEach((c: any) => {
-              const openTime = c[0];
-              if (openTime >= startTs) {
-                if (parseFloat(c[4]) > parseFloat(c[1])) g++;
-                else r++;
-              }
-            });
-
-            const totalToday = g + r;
-            const remaining = 1440 - totalToday;
-
-            const pRes = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}USDT`);
-            const pData = await pRes.json();
-
-            const dRes = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${symbol}USDT&interval=1d&limit=7`);
-            const dData = await dRes.json();
-            let gDays = 0;
-            dData.forEach((c: any) => parseFloat(c[4]) > parseFloat(c[1]) ? gDays++ : null);
-            const wr = ((gDays / 7) * 100).toFixed(0) + '%';
-
-            newData[symbol] = { green: g, red: r, price: parseFloat(pData.price), winRate: wr, remaining: remaining, chartData };
-          }
+          newData[symbol] = { green: g, red: r, price: parseFloat(pData.price), winRate: wr, remaining: remaining };
         } catch (e) { console.error(e); }
       }
       setMarketData(newData);
@@ -150,66 +80,31 @@ export default function Home() {
 
     const updateTimer = () => {
       const now = new Date();
-      if (isFastArena) {
-        // Timer to next 15m block
-        const nextMin = (Math.floor(now.getMinutes() / 15) + 1) * 15;
-        const nextBlock = new Date(now);
-        nextBlock.setMinutes(nextMin, 0, 0);
-        const diff = nextBlock.getTime() - now.getTime();
-        const m = Math.floor((diff / (1000 * 60)) % 60);
-        const s = Math.floor((diff / 1000) % 60);
-        setTimeLeft(`${m}m ${s}s`);
-      } else {
-        // Timer to UTC Midnight
-        const next = new Date(now);
-        next.setUTCHours(24, 0, 0, 0);
-        const diff = next.getTime() - now.getTime();
-        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const m = Math.floor((diff / (1000 * 60)) % 60);
-        const s = Math.floor((diff / 1000) % 60);
-        setTimeLeft(`${h}h ${m}m ${s}s`);
-      }
+      const next = new Date(now);
+      next.setUTCHours(24, 0, 0, 0);
+      const diff = next.getTime() - now.getTime();
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / (1000 * 60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+      setTimeLeft(`${h}h ${m}m ${s}s`);
     };
 
     fetchData();
     updateTimer();
-    const dInt = setInterval(fetchData, isFastArena ? 5000 : 60000); // Faster polling for 15m
+    const dInt = setInterval(fetchData, 60000);
     const tInt = setInterval(updateTimer, 1000);
     return () => { clearInterval(dInt); clearInterval(tInt); };
-  }, [isFastArena]); // Re-run when mode changes
+  }, []);
 
   return (
-    <main className={`min-h-screen font-sans p-6 selection:bg-green-900 selection:text-white relative transition-colors duration-1000 ${isFastArena ? 'bg-[#000000]' : 'bg-[#050505] text-gray-200'}`}>
+    <main className="min-h-screen bg-[#050505] text-gray-200 font-sans p-6 selection:bg-green-900 selection:text-white relative">
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        @keyframes thunder {
-            0% { opacity: 0; }
-            10% { opacity: 1; }
-            20% { opacity: 0; }
-            30% { opacity: 0.8; }
-            45% { opacity: 0; }
-            100% { opacity: 0; }
-        }
-        .thunder-flash {
-            animation: thunder 0.8s ease-out forwards;
-        }
       `}</style>
 
-      {/* THUNDER ACTIONS */}
-      {showThunder && (
-        <div className="fixed inset-0 z-[99999] bg-white pointer-events-none thunder-flash mix-blend-overlay"></div>
-      )}
-
-      {/* ARENA OVERLAY TEXT */}
-      {isFastArena && !showThunder && (
-        <div className="fixed top-24 left-1/2 -translate-x-1/2 pointer-events-none z-0 opacity-10">
-          <h1 className="text-[10rem] font-black italic tracking-tighter text-white leading-none whitespace-nowrap animate-pulse">FAST ARENA</h1>
-        </div>
-      )}
-
       {/* Info Modal Portal */}
-      {mounted && showInfo && createPortal(
+      {showInfo && createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={() => setShowInfo(false)}>
           <div className="bg-[#0A0A0A] border border-gray-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative" onClick={e => e.stopPropagation()}>
             <button onClick={() => setShowInfo(false)} className="absolute top-4 right-4 text-gray-500 hover:text-white">
@@ -247,59 +142,37 @@ export default function Home() {
         document.body
       )}
 
-      {/* 1. HEADER */}
-      <header className="max-w-7xl mx-auto flex justify-between items-end mb-12 relative z-10 border-b border-gray-900 pb-6">
-        <div>
-          <h1 className={`text-6xl font-black tracking-tighter mb-2 flex items-center gap-4 ${isFastArena ? 'text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-white to-yellow-300 animate-pulse italic' : 'text-white'}`}>
-            {isFastArena ? '⚡ 15M THUNDER' : 'BAR WARS'}
-            <span className="text-xl bg-gray-800 text-gray-300 px-2 py-1 rounded rotate-3 border border-gray-700">V3.8</span>
-          </h1>
-          <p className="text-gray-500 font-mono text-sm tracking-widest pl-1">
-            {isFastArena ? 'HIGH VELOCITY • 8/15 BAR RULE • WINNER TAKES ALL' : 'CRYPTO-WEATHER BATTLE ARENA • BASE L2'}
-          </p>
+      <header className="flex flex-col md:flex-row justify-between items-center mb-10 max-w-7xl mx-auto border-b border-gray-900 pb-6">
+        <div className="flex items-center gap-4">
+          <div>
+            <h1 className="text-3xl font-extrabold tracking-tight text-white mb-1">BAR WARS</h1>
+            <p className="text-xs text-gray-500 uppercase tracking-widest font-semibold flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+              Base Protocol // Daily Prediction Market
+            </p>
+          </div>
         </div>
 
-        <div className="flex gap-4 items-center">
-          {/* SWITCH BUTTON */}
-          <button
-            onClick={toggleArena}
-            className={`px-6 py-3 rounded-xl font-bold tracking-widest text-xs border transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] hover:scale-105 active:scale-95 flex items-center gap-2 ${isFastArena ? 'bg-[#0A0A0A] border-yellow-500/50 text-yellow-500 hover:border-yellow-400 hover:text-yellow-400 hover:shadow-[0_0_20px_rgba(234,179,8,0.3)]' : 'bg-[#0A0A0A] border-purple-500/50 text-purple-500 hover:border-purple-400 hover:text-purple-400 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]'}`}
-          >
-            {isFastArena ? (
-              <>
-                <span>RETURN TO DAILY</span>
-                <span className="text-lg">🛡️</span>
-              </>
-            ) : (
-              <>
-                <span className="text-lg animate-pulse">⚡</span>
-                <span>ENTER 15M ARENA</span>
-              </>
-            )}
+        <div className="flex items-center gap-6 mt-4 md:mt-0">
+          <button onClick={() => setShowInfo(true)} className="flex items-center gap-2 px-3 py-2 rounded bg-gray-900 border border-gray-800 text-gray-400 hover:text-white text-xs font-mono uppercase tracking-wide transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+            </svg>
+            <span>Game Rules</span>
           </button>
-
-          <button
-            onClick={() => setShowInfo(true)}
-            className="bg-[#0A0A0A] border border-gray-800 hover:border-gray-600 text-gray-400 hover:text-white px-4 py-3 rounded-xl font-bold tracking-widest text-xs transition-all uppercase"
-          >
-            How to Play
-          </button>
-          <div className="bg-[#0A0A0A] border border-gray-800 px-4 py-3 rounded-xl font-mono text-sm text-gray-400 min-w-[140px] text-center shadow-lg">
-            {isFastArena ? (
-              <span className="text-yellow-500 font-bold animate-pulse">NEXT BATTLE: 15m</span>
-            ) : (
-              <span>CLOSES: <span className="text-white font-bold">{timeLeft}</span></span>
-            )}
+          <div className="text-right hidden sm:block">
+            <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Round Ends (UTC)</div>
+            <div className="text-2xl font-mono font-bold text-gray-300">{timeLeft || "00h 00m 00s"}</div>
           </div>
-          <ConnectButton showBalance={false} accountStatus="address" chainStatus="icon" />
+          <ConnectButton showBalance={false} chainStatus="icon" accountStatus="address" />
         </div>
       </header>
 
-      <UserStats contractAddress={currentContract} />
+      <UserStats />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
         {MARKETS.map(symbol => (
-          <MarketCard key={symbol} symbol={symbol} data={marketData[symbol]} contractAddress={currentContract} />
+          <MarketCard key={symbol} symbol={symbol} data={marketData[symbol]} />
         ))}
       </div>
 
@@ -311,7 +184,7 @@ export default function Home() {
   );
 }
 
-function MarketCard({ symbol, data, contractAddress }: { symbol: string, data: any, contractAddress: `0x${string}` }) {
+function MarketCard({ symbol, data }: { symbol: string, data: any }) {
   const { address } = useAccount();
   const { writeContract, data: hash, isPending, error: writeError } = useWriteContract();
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash });
@@ -321,14 +194,14 @@ function MarketCard({ symbol, data, contractAddress }: { symbol: string, data: a
   const [showSuccess, setShowSuccess] = useState(false);
 
   const { data: stats, refetch } = useReadContract({
-    address: contractAddress,
+    address: CONTRACT_ADDRESS,
     abi: abi,
     functionName: 'getMarketStats',
     args: [symbol],
   });
 
   const { data: userStats, refetch: refetchUser } = useReadContract({
-    address: contractAddress,
+    address: CONTRACT_ADDRESS,
     abi: abi,
     functionName: 'getUserMarketStats',
     args: [symbol, address],
@@ -374,7 +247,7 @@ function MarketCard({ symbol, data, contractAddress }: { symbol: string, data: a
       if (quantity > 1) {
         // Batch Bet
         writeContract({
-          address: contractAddress,
+          address: CONTRACT_ADDRESS,
           abi: abi,
           functionName: 'betBatch',
           args: [symbol, side, quantity],
@@ -383,7 +256,7 @@ function MarketCard({ symbol, data, contractAddress }: { symbol: string, data: a
       } else {
         // Single Bet
         writeContract({
-          address: contractAddress,
+          address: CONTRACT_ADDRESS,
           abi: abi,
           functionName: 'bet',
           args: [symbol, side],
@@ -405,22 +278,8 @@ function MarketCard({ symbol, data, contractAddress }: { symbol: string, data: a
           </div>
           {(myBulls > 0 || myBears > 0) && (
             <div className="flex gap-2 text-[10px] font-mono mt-1">
-              {myBulls > 0 && (
-                <span className="text-green-500 bg-green-900/20 px-1 rounded border border-green-900/30 flex items-center gap-1">
-                  YOU: {myBulls} BULL
-                  <span className="text-green-300 opacity-70">
-                    (~{((pool + (myBulls * 0.001)) * (myBulls / (bullTickets + bearTickets || 1))).toFixed(4)} Ξ)
-                  </span>
-                </span>
-              )}
-              {myBears > 0 && (
-                <span className="text-red-500 bg-red-900/20 px-1 rounded border border-red-900/30 flex items-center gap-1">
-                  YOU: {myBears} BEAR
-                  <span className="text-red-300 opacity-70">
-                    (~{((pool + (myBears * 0.001)) * (myBears / (bullTickets + bearTickets || 1))).toFixed(4)} Ξ)
-                  </span>
-                </span>
-              )}
+              {myBulls > 0 && <span className="text-green-500 bg-green-900/20 px-1 rounded border border-green-900/30">YOU: {myBulls} BULL</span>}
+              {myBears > 0 && <span className="text-red-500 bg-red-900/20 px-1 rounded border border-red-900/30">YOU: {myBears} BEAR</span>}
             </div>
           )}
         </div>
@@ -438,13 +297,8 @@ function MarketCard({ symbol, data, contractAddress }: { symbol: string, data: a
       <div className="relative h-64 w-full bg-[#050505] flex items-end justify-center overflow-hidden flex-grow border-y border-gray-900/50">
         <div className={`absolute top-0 left-0 w-full h-full opacity-10 bg-gradient-to-b ${ASSET_LOGOS[symbol].replace('text-', 'from-')}/20 to-transparent pointer-events-none`}></div>
 
-        {/* CHART - Background Layer */}
-        <div className="absolute inset-0 z-0 opacity-40 hover:opacity-100 transition-opacity duration-300">
-          {data?.chartData && <MarketChart data={data.chartData} colors={{ lineColor: '#2962FF', textColor: '#555' }} />}
-        </div>
-
         {/* BULL */}
-        <div className="absolute left-4 bottom-4 h-[90%] w-[48%] flex items-end justify-start pointer-events-none z-10">
+        <div className="absolute left-4 bottom-4 h-[90%] w-[48%] flex items-end justify-start pointer-events-none z-0">
           <Image
             src={`/${symbol.toLowerCase()}_bull.png`}
             alt="Bull"
@@ -455,7 +309,7 @@ function MarketCard({ symbol, data, contractAddress }: { symbol: string, data: a
         </div>
 
         {/* BEAR */}
-        <div className="absolute right-4 bottom-4 h-[90%] w-[48%] flex items-end justify-end pointer-events-none z-10">
+        <div className="absolute right-4 bottom-4 h-[90%] w-[48%] flex items-end justify-end pointer-events-none z-0">
           <Image
             src={`/${symbol.toLowerCase()}_bear.png`}
             alt="Bear"
@@ -676,14 +530,13 @@ function PayoutPreview({ pool, tickets, side, userQuantity = 1 }: { pool: number
   )
 }
 
-function UserStats({ contractAddress }: { contractAddress: `0x${string}` }) {
-  const { address, isConnected } = useAccount();
-  const { data: bal, refetch } = useReadContract({
-    address: contractAddress,
+function UserStats() {
+  const { address } = useAccount();
+  const { data: balance, refetch } = useReadContract({
+    address: CONTRACT_ADDRESS,
     abi: abi,
-    functionName: 'getUserTickets',
+    functionName: 'balanceOf',
     args: [address],
-    query: { enabled: !!address },
   });
 
   useEffect(() => {
@@ -691,7 +544,7 @@ function UserStats({ contractAddress }: { contractAddress: `0x${string}` }) {
     return () => clearInterval(interval);
   }, [refetch]);
 
-  if (!address || !bal) return null;
+  if (!address || !balance) return null;
 
   return (
     <div className="max-w-7xl mx-auto mb-6 px-4">
@@ -701,7 +554,7 @@ function UserStats({ contractAddress }: { contractAddress: `0x${string}` }) {
           <span className="text-gray-400 text-sm font-mono uppercase tracking-widest">My Active Tickets</span>
         </div>
         <div className="text-2xl font-bold text-white font-mono tracking-tight drop-shadow-md">
-          {Number(bal).toString()} <span className="text-sm text-gray-600 font-normal">TICKETS</span>
+          {Number(balance).toString()} <span className="text-sm text-gray-600 font-normal">TICKETS</span>
         </div>
       </div>
     </div>
