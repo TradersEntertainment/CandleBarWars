@@ -226,6 +226,7 @@ function MarketCard({ symbol, data }: { symbol: string, data: any }) {
 
   const green = data ? data.green : 0;
   const red = data ? data.red : 0;
+  const remaining = data ? data.remaining : 1440;
   const price = data ? data.price : 0;
   const winRate = data ? data.winRate : '---';
   const total = green + red;
