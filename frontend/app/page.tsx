@@ -335,6 +335,12 @@ function MarketCard({ symbol, data }: { symbol: string, data: any }) {
             </div>
           </div>
         </div>
+
+        {/* REMAINING CANDLES INDICATOR */}
+        <div className="absolute top-2 left-1/2 -translate-x-1/2 bg-black/60 border border-gray-800 px-2 py-1 rounded-full text-[9px] font-mono text-gray-400 z-10 backdrop-blur-sm flex items-center gap-2 shadow-xl">
+          <span className="w-1 h-1 bg-gray-500 rounded-full"></span>
+          REMAINING: <span className="text-white font-bold">{remaining}</span> BARS
+        </div>
       </div>
 
       {/* Win Rate */}
