@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import abi from './abi.json';
+import { MarketChart } from './MarketChart';
 
 const CONTRACT_ADDRESS_DAILY = '0x7da6Ef758A38773033FeC7421959c0AECbeF4719'; // V3.8 House Wins
 const CONTRACT_ADDRESS_15M = '0x5eeF836485FC1113Ad0B0C0EFFA429D1a0684B2b'; // V4 15m
@@ -76,6 +77,14 @@ export default function Home() {
             // Filter candles that belong to the current 15-minute block
             const currentBlockStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), startOf15m, 0, 0).getTime();
 
+            const chartData = kData.map((c: any) => ({
+              time: c[0] / 1000,
+              open: parseFloat(c[1]),
+              high: parseFloat(c[2]),
+              low: parseFloat(c[3]),
+              close: parseFloat(c[4]),
+            }));
+
             kData.forEach((c: any) => {
               const openTime = c[0];
               if (openTime >= currentBlockStart) {
@@ -87,12 +96,20 @@ export default function Home() {
             const wr = "---"; // Win rate na for 15m
             const pRes = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}USDT`);
             const pData = await pRes.json();
-            newData[symbol] = { green: g, red: r, price: parseFloat(pData.price), winRate: wr, remaining: remaining };
+            newData[symbol] = { green: g, red: r, price: parseFloat(pData.price), winRate: wr, remaining: remaining, chartData };
 
           } else {
             // DAILY LOGIC
             const kRes = await fetch(`https://fapi.binance.com/fapi/v1/klines?symbol=${symbol}USDT&interval=1m&limit=1440`);
             const kData = await kRes.json();
+
+            const chartData = kData.map((c: any) => ({
+              time: c[0] / 1000,
+              open: parseFloat(c[1]),
+              high: parseFloat(c[2]),
+              low: parseFloat(c[3]),
+              close: parseFloat(c[4]),
+            }));
 
             // Filter for Today (UTC 00:00)
             const startOfDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));
@@ -119,7 +136,7 @@ export default function Home() {
             dData.forEach((c: any) => parseFloat(c[4]) > parseFloat(c[1]) ? gDays++ : null);
             const wr = ((gDays / 7) * 100).toFixed(0) + '%';
 
-            newData[symbol] = { green: g, red: r, price: parseFloat(pData.price), winRate: wr, remaining: remaining };
+            newData[symbol] = { green: g, red: r, price: parseFloat(pData.price), winRate: wr, remaining: remaining, chartData };
           }
         } catch (e) { console.error(e); }
       }
@@ -273,7 +290,7 @@ export default function Home() {
         </div>
       </header>
 
-      <UserStats />
+      <UserStats contractAddress={currentContract} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
         {MARKETS.map(symbol => (
@@ -416,8 +433,13 @@ function MarketCard({ symbol, data, contractAddress }: { symbol: string, data: a
       <div className="relative h-64 w-full bg-[#050505] flex items-end justify-center overflow-hidden flex-grow border-y border-gray-900/50">
         <div className={`absolute top-0 left-0 w-full h-full opacity-10 bg-gradient-to-b ${ASSET_LOGOS[symbol].replace('text-', 'from-')}/20 to-transparent pointer-events-none`}></div>
 
+        {/* CHART - Background Layer */}
+        <div className="absolute inset-0 z-0 opacity-40 hover:opacity-100 transition-opacity duration-300">
+          {data?.chartData && <MarketChart data={data.chartData} colors={{ lineColor: '#2962FF', textColor: '#555' }} />}
+        </div>
+
         {/* BULL */}
-        <div className="absolute left-4 bottom-4 h-[90%] w-[48%] flex items-end justify-start pointer-events-none z-0">
+        <div className="absolute left-4 bottom-4 h-[90%] w-[48%] flex items-end justify-start pointer-events-none z-10">
           <Image
             src={`/${symbol.toLowerCase()}_bull.png`}
             alt="Bull"
@@ -428,7 +450,7 @@ function MarketCard({ symbol, data, contractAddress }: { symbol: string, data: a
         </div>
 
         {/* BEAR */}
-        <div className="absolute right-4 bottom-4 h-[90%] w-[48%] flex items-end justify-end pointer-events-none z-0">
+        <div className="absolute right-4 bottom-4 h-[90%] w-[48%] flex items-end justify-end pointer-events-none z-10">
           <Image
             src={`/${symbol.toLowerCase()}_bear.png`}
             alt="Bear"
@@ -649,13 +671,14 @@ function PayoutPreview({ pool, tickets, side, userQuantity = 1 }: { pool: number
   )
 }
 
-function UserStats() {
-  const { address } = useAccount();
-  const { data: balance, refetch } = useReadContract({
-    address: CONTRACT_ADDRESS,
+function UserStats({ contractAddress }: { contractAddress: `0x${string}` }) {
+  const { address, isConnected } = useAccount();
+  const { data: bal, refetch } = useReadContract({
+    address: contractAddress,
     abi: abi,
-    functionName: 'balanceOf',
+    functionName: 'getUserTickets',
     args: [address],
+    query: { enabled: !!address },
   });
 
   useEffect(() => {
@@ -663,7 +686,7 @@ function UserStats() {
     return () => clearInterval(interval);
   }, [refetch]);
 
-  if (!address || !balance) return null;
+  if (!address || !bal) return null;
 
   return (
     <div className="max-w-7xl mx-auto mb-6 px-4">
@@ -673,7 +696,7 @@ function UserStats() {
           <span className="text-gray-400 text-sm font-mono uppercase tracking-widest">My Active Tickets</span>
         </div>
         <div className="text-2xl font-bold text-white font-mono tracking-tight drop-shadow-md">
-          {Number(balance).toString()} <span className="text-sm text-gray-600 font-normal">TICKETS</span>
+          {Number(bal).toString()} <span className="text-sm text-gray-600 font-normal">TICKETS</span>
         </div>
       </div>
     </div>
