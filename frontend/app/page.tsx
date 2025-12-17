@@ -179,29 +179,51 @@ export default function Home() {
         document.body
       )}
 
-      <header className="flex flex-col md:flex-row justify-between items-center mb-10 max-w-7xl mx-auto border-b border-gray-900 pb-6">
-        <div className="flex items-center gap-4">
-          <div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-white mb-1">BAR WARS</h1>
-            <p className="text-xs text-gray-500 uppercase tracking-widest font-semibold flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-              Base Protocol // Daily Prediction Market
-            </p>
-          </div>
+      {/* 1. HEADER */}
+      <header className="max-w-7xl mx-auto flex justify-between items-end mb-12 relative z-10 border-b border-gray-900 pb-6">
+        <div>
+          <h1 className={`text-6xl font-black tracking-tighter mb-2 flex items-center gap-4 ${isFastArena ? 'text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-white to-yellow-300 animate-pulse italic' : 'text-white'}`}>
+            {isFastArena ? '⚡ 15M THUNDER' : 'BAR WARS'}
+            <span className="text-xl bg-gray-800 text-gray-300 px-2 py-1 rounded rotate-3 border border-gray-700">V3.8</span>
+          </h1>
+          <p className="text-gray-500 font-mono text-sm tracking-widest pl-1">
+            {isFastArena ? 'HIGH VELOCITY • 8/15 BAR RULE • WINNER TAKES ALL' : 'CRYPTO-WEATHER BATTLE ARENA • BASE L2'}
+          </p>
         </div>
 
-        <div className="flex items-center gap-6 mt-4 md:mt-0">
-          <button onClick={() => setShowInfo(true)} className="flex items-center gap-2 px-3 py-2 rounded bg-gray-900 border border-gray-800 text-gray-400 hover:text-white text-xs font-mono uppercase tracking-wide transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-            </svg>
-            <span>Game Rules</span>
+        <div className="flex gap-4 items-center">
+          {/* SWITCH BUTTON */}
+          <button
+            onClick={toggleArena}
+            className={`px-6 py-3 rounded-xl font-bold tracking-widest text-xs border transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] hover:scale-105 active:scale-95 flex items-center gap-2 ${isFastArena ? 'bg-[#0A0A0A] border-yellow-500/50 text-yellow-500 hover:border-yellow-400 hover:text-yellow-400 hover:shadow-[0_0_20px_rgba(234,179,8,0.3)]' : 'bg-[#0A0A0A] border-purple-500/50 text-purple-500 hover:border-purple-400 hover:text-purple-400 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)]'}`}
+          >
+            {isFastArena ? (
+              <>
+                <span>RETURN TO DAILY</span>
+                <span className="text-lg">🛡️</span>
+              </>
+            ) : (
+              <>
+                <span className="text-lg animate-pulse">⚡</span>
+                <span>ENTER 15M ARENA</span>
+              </>
+            )}
           </button>
-          <div className="text-right hidden sm:block">
-            <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Round Ends (UTC)</div>
-            <div className="text-2xl font-mono font-bold text-gray-300">{timeLeft || "00h 00m 00s"}</div>
+
+          <button
+            onClick={() => setShowInfo(true)}
+            className="bg-[#0A0A0A] border border-gray-800 hover:border-gray-600 text-gray-400 hover:text-white px-4 py-3 rounded-xl font-bold tracking-widest text-xs transition-all uppercase"
+          >
+            How to Play
+          </button>
+          <div className="bg-[#0A0A0A] border border-gray-800 px-4 py-3 rounded-xl font-mono text-sm text-gray-400 min-w-[140px] text-center shadow-lg">
+            {isFastArena ? (
+              <span className="text-yellow-500 font-bold animate-pulse">NEXT BATTLE: 15m</span>
+            ) : (
+              <span>CLOSES: <span className="text-white font-bold">{timeLeft}</span></span>
+            )}
           </div>
-          <ConnectButton showBalance={false} chainStatus="icon" accountStatus="address" />
+          <ConnectButton showBalance={false} accountStatus="address" chainStatus="icon" />
         </div>
       </header>
 
