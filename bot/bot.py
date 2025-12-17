@@ -27,8 +27,8 @@ PINATA_JWT = os.getenv("PINATA_JWT")
 
 CONTRACTS_DIR = os.path.join(BASE_DIR, '..', 'contracts')
 
-# Load Contract Address (V3.2)
-with open(os.path.join(CONTRACTS_DIR, "deployed_v3_2_address.txt"), "r") as f:
+# Load Contract Address (V3.7)
+with open(os.path.join(CONTRACTS_DIR, "deployed_v3_7_address.txt"), "r") as f:
     CONTRACT_ADDRESS = f.read().strip()
 
 # Load ABI
