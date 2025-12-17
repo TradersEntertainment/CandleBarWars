@@ -28,6 +28,11 @@ const ASSET_LOGOS: Record<string, string> = {
 };
 
 export default function Home() {
+  // V4: Fast Arena Logic (State must be declared before usage)
+  const [isFastArena, setIsFastArena] = useState(false);
+  const [showThunder, setShowThunder] = useState(false);
+
+  // Determine contract based on state
   const currentContract = isFastArena ? CONTRACT_ADDRESS_15M : CONTRACT_ADDRESS_DAILY;
 
   const { data: ethPrice } = useReadContract({
@@ -40,10 +45,6 @@ export default function Home() {
   const [showInfo, setShowInfo] = useState(false);
   const [timeLeft, setTimeLeft] = useState<string>("");
   const [marketData, setMarketData] = useState<any>({});
-
-  // V4: Fast Arena Logic
-  const [isFastArena, setIsFastArena] = useState(false);
-  const [showThunder, setShowThunder] = useState(false);
 
   const toggleArena = () => {
     setShowThunder(true);
