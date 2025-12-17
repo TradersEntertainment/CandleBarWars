@@ -299,20 +299,26 @@ function MarketCard({ symbol, data }: { symbol: string, data: any }) {
         </div>
 
         {/* BAR COUNTER */}
-        <div className="absolute bottom-10 left-0 right-0 h-4 bg-gray-800 flex overflow-hidden z-20 border-t border-gray-700 mx-0">
-          <div style={{ width: `${gPct}%` }} className="h-full bg-[#00ff41] shadow-[0_0_20px_rgba(0,255,65,0.8)] transition-all duration-1000 ease-out flex items-center justify-start pl-2">
-            <div className="w-1 h-full bg-white/20"></div>
-          </div>
-          <div className="w-[4px] h-full bg-black z-30"></div>
-          <div style={{ width: `${rPct}%` }} className="h-full bg-[#ff003c] shadow-[0_0_20px_rgba(255,0,60,0.8)] transition-all duration-1000 ease-out flex items-center justify-end pr-2">
-            <div className="w-1 h-full bg-white/20"></div>
-          </div>
-        </div>
+        {/* NEW STACKED BAR COUNTERS */}
+        <div className="absolute bottom-0 left-0 right-0 z-30 flex flex-col font-mono uppercase tracking-widest text-[9px] font-bold">
 
-        {/* CANDLE COUNTS */}
-        <div className="absolute bottom-3 w-full flex justify-between px-4 text-[10px] font-black tracking-widest z-30 text-white font-mono uppercase">
-          <span className="text-[#00ff41] drop-shadow-md">{green} BULLISH</span>
-          <span className="text-[#ff003c] drop-shadow-md">{red} BEARISH</span>
+          {/* GREEN ROW */}
+          <div className="relative w-full h-6 bg-black/80 border-t border-zinc-800 flex items-center">
+            <div style={{ width: `${gPct}%` }} className="h-full bg-gradient-to-r from-green-900/40 to-green-500/40 border-r-2 border-green-500 transition-all duration-1000 ease-out relative shadow-[0_0_15px_rgba(0,255,65,0.2)]"></div>
+            <div className="absolute left-3 z-10 text-white flex items-center gap-2 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+              <span className="w-1.5 h-1.5 bg-[#00ff41] rounded-full animate-[pulse_1.5s_infinite] shadow-[0_0_8px_#00ff41]"></span>
+              <span className="text-[#00ff41] text-xs font-black">{green}</span> GREEN CANDLES
+            </div>
+          </div>
+
+          {/* RED ROW */}
+          <div className="relative w-full h-6 bg-black/80 border-t border-zinc-800 flex items-center justify-end">
+            <div style={{ width: `${rPct}%` }} className="h-full bg-gradient-to-l from-red-900/40 to-red-500/40 border-l-2 border-red-500 transition-all duration-1000 ease-out relative shadow-[0_0_15px_rgba(255,0,60,0.2)]"></div>
+            <div className="absolute right-3 z-10 text-white flex items-center gap-2 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+              RED CANDLES <span className="text-[#ff003c] text-xs font-black">{red}</span>
+              <span className="w-1.5 h-1.5 bg-[#ff003c] rounded-full animate-[pulse_1.5s_infinite] shadow-[0_0_8px_#ff003c]"></span>
+            </div>
+          </div>
         </div>
       </div>
 
