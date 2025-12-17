@@ -27,8 +27,8 @@ PINATA_JWT = os.getenv("PINATA_JWT")
 
 CONTRACTS_DIR = os.path.join(BASE_DIR, '..', 'contracts')
 
-# Load Contract Address (V3.7)
-with open(os.path.join(CONTRACTS_DIR, "deployed_v3_7_address.txt"), "r") as f:
+# Load Contract Address (V3.8)
+with open(os.path.join(CONTRACTS_DIR, "deployed_v3_8_address.txt"), "r") as f:
     CONTRACT_ADDRESS = f.read().strip()
 
 # Load ABI
@@ -88,7 +88,7 @@ def resolve_round():
     for symbol in MARKETS:
         green, red = get_candle_stats(symbol)
         
-        # 1 = BULL, 2 = BEAR
+        # 1 = BULL, 2 = BEAR, 0 = TIE (House Wins)
         winner = 0
         if green > red:
             winner = 1
@@ -97,8 +97,10 @@ def resolve_round():
             winner = 2
             print(f"[{symbol}] Winner: BEARS")
         else:
-            print(f"[{symbol}] Draw! Skipping resolution.")
-            continue
+            winner = 0
+            print(f"[{symbol}] Draw! House Wins.")
+            
+        # Proceed to submit resolution for all outcomes (including Tie)
 
         try:
             print(f"[{symbol}] Sending TX with nonce {nonce}...")

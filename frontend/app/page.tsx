@@ -37,6 +37,20 @@ export default function Home() {
   const [timeLeft, setTimeLeft] = useState<string>("");
   const [marketData, setMarketData] = useState<any>({});
 
+  // V4: Fast Arena Logic
+  const [isFastArena, setIsFastArena] = useState(false);
+  const [showThunder, setShowThunder] = useState(false);
+
+  const toggleArena = () => {
+    setShowThunder(true);
+    setTimeout(() => {
+      setIsFastArena(prev => !prev);
+    }, 300); // Switch while screen is white
+    setTimeout(() => {
+      setShowThunder(false);
+    }, 800);
+  };
+
   // 1. Fetch Data (Binance)
   useEffect(() => {
     const fetchData = async () => {
@@ -97,11 +111,34 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#050505] text-gray-200 font-sans p-6 selection:bg-green-900 selection:text-white relative">
+    <main className={`min-h-screen font-sans p-6 selection:bg-green-900 selection:text-white relative transition-colors duration-1000 ${isFastArena ? 'bg-[#000000]' : 'bg-[#050505] text-gray-200'}`}>
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
         body { font-family: 'Inter', sans-serif; }
+        @keyframes thunder {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            20% { opacity: 0; }
+            30% { opacity: 0.8; }
+            45% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+        .thunder-flash {
+            animation: thunder 0.8s ease-out forwards;
+        }
       `}</style>
+
+      {/* THUNDER ACTIONS */}
+      {showThunder && (
+        <div className="fixed inset-0 z-[99999] bg-white pointer-events-none thunder-flash mix-blend-overlay"></div>
+      )}
+
+      {/* ARENA OVERLAY TEXT */}
+      {isFastArena && !showThunder && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 pointer-events-none z-0 opacity-10">
+          <h1 className="text-[10rem] font-black italic tracking-tighter text-white leading-none whitespace-nowrap animate-pulse">FAST ARENA</h1>
+        </div>
+      )}
 
       {/* Info Modal Portal */}
       {showInfo && createPortal(
@@ -278,8 +315,22 @@ function MarketCard({ symbol, data }: { symbol: string, data: any }) {
           </div>
           {(myBulls > 0 || myBears > 0) && (
             <div className="flex gap-2 text-[10px] font-mono mt-1">
-              {myBulls > 0 && <span className="text-green-500 bg-green-900/20 px-1 rounded border border-green-900/30">YOU: {myBulls} BULL</span>}
-              {myBears > 0 && <span className="text-red-500 bg-red-900/20 px-1 rounded border border-red-900/30">YOU: {myBears} BEAR</span>}
+              {myBulls > 0 && (
+                <span className="text-green-500 bg-green-900/20 px-1 rounded border border-green-900/30 flex items-center gap-1">
+                  YOU: {myBulls} BULL
+                  <span className="text-green-300 opacity-70">
+                    (~{((pool + (myBulls * 0.001)) * (myBulls / (bullTickets + bearTickets || 1))).toFixed(4)} Ξ)
+                  </span>
+                </span>
+              )}
+              {myBears > 0 && (
+                <span className="text-red-500 bg-red-900/20 px-1 rounded border border-red-900/30 flex items-center gap-1">
+                  YOU: {myBears} BEAR
+                  <span className="text-red-300 opacity-70">
+                    (~{((pool + (myBears * 0.001)) * (myBears / (bullTickets + bearTickets || 1))).toFixed(4)} Ξ)
+                  </span>
+                </span>
+              )}
             </div>
           )}
         </div>

@@ -1,0 +1,8 @@
+WARNING: You are currently using Node.js v24.11.1, which is not supported by Hardhat. This can lead to unexpected behavior. See https://hardhat.org/nodejs-versions
+
+
+[dotenv@17.2.3] injecting env (6) from ..\.env -- tip: ­şöÉ prevent committing .env to code: https://dotenvx.com/precommit
+Compiled 20 Solidity files successfully (evm target: paris).
+[dotenv@17.2.3] injecting env (0) from ..\.env -- tip: ­şøá´©Å  run anywhere with `dotenvx run -- yourcommand`
+Deploying BarWars...
+BarWars deployed to: 0x7da6Ef758A38773033FeC7421959c0AECbeF4719

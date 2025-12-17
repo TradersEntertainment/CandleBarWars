@@ -1,17 +1,19 @@
 const hre = require("hardhat");
 
 async function main() {
-    console.log("Deploying WeatherNFT...");
+    console.log("Deploying BarWars...");
 
-    const WeatherNFT = await hre.ethers.getContractFactory("WeatherNFT");
-    const weatherNFT = await WeatherNFT.deploy();
+    const BarWars = await hre.ethers.getContractFactory("BarWars");
+    const barWars = await BarWars.deploy();
 
-    await weatherNFT.waitForDeployment();
+    await barWars.waitForDeployment();
 
-    const address = await weatherNFT.getAddress();
-    console.log("WeatherNFT deployed to:", address);
+    const address = await barWars.getAddress();
+    console.log("BarWars deployed to:", address);
 
-    // Verify (optional later)
+    // Save address for bot/frontend
+    const fs = require('fs');
+    fs.writeFileSync('deployed_v3_8_address.txt', address);
 }
 
 main().catch((error) => {

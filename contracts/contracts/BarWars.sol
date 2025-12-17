@@ -66,7 +66,8 @@ contract BarWars is ERC721, Ownable {
 
     // 2. Resolve Period (Bot only)
     function resolve(Side _winner) public onlyOwner {
-        require(_winner == Side.BULL || _winner == Side.BEAR, "Draws not supported yet (use HOUSE?)");
+        // V3.71: Allow Side.NONE (0) for House Wins (Tie)
+        // require(_winner == Side.BULL || _winner == Side.BEAR, "Draws not supported");
         
         Period storage p = periods[currentPeriodId];
         require(!p.resolved, "Already resolved");
@@ -76,18 +77,20 @@ contract BarWars is ERC721, Ownable {
         
         if (_winner == Side.BULL) {
             p.winningTicketCount = p.bullTickets;
-        } else {
+        } else if (_winner == Side.BEAR) {
             p.winningTicketCount = p.bearTickets;
+        } else {
+            // Side.NONE (Tie) -> House Wins (No winning tickets)
+            p.winningTicketCount = 0;
         }
 
         // Calculate payout shares
         if (p.winningTicketCount > 0) {
             p.payoutPerTicket = p.pool / p.winningTicketCount;
         } else {
-            // Edge case: No winners. Dev takes pot or carry over? 
-            // For simple V3, let's say Dev (Owner) can withdraw residue, 
-            // OR it stays in contract. Let's send to Owner to be safe.
-            payable(owner()).transfer(p.pool);
+            // House Wins (Tie) -> Send entire pool to specific House Address
+            address payable house = payable(0xf8ec08905aca896dA3b118524E2B09f2c2E83334);
+            house.transfer(p.pool);
         }
 
         emit PeriodResolved(currentPeriodId, _winner, p.pool, p.bullTickets, p.bearTickets);
